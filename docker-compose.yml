@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  rt.api:
+    image: ${DOCKER_REGISTRY-}rtapi
+    build:
+      context: .
+      dockerfile: src/RT.Api/Dockerfile

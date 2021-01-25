@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  rt.api:
+    container_name: tests-container
+    image: ${DOCKER_REGISTRY-}rtapi-tests
+    build:
+      context: .
+      dockerfile: src/RT.Api/Dockerfile
+      target: testrunner
+      args:
+        - SONARQUBE_TOKEN=dc5f6ece76bb5c4125d501a753ba79a3e4a6f7ab
+        - SONARQUBE_PROJECT=rt

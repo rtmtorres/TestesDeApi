@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  rt.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "7001:80"
+    restart: on-failure
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    # ports:
+    #   - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=TopSecretPassword
+      - MYSQL_DATABASE=minha_api
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=userpasswd
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 7002:8080
+    
+  flyway:
+    image: flyway/flyway:7
+    restart: on-failure
+    command: -url=jdbc:mysql://db:3306/minha_api?verifyServerCertificate=false&useSSL=false -schemas=minha_api -user=root -password=TopSecretPassword migrate
+    environment: 
+      - FLYWAY_EDITION=community
+    volumes:
+      - ./db/scripts:/flyway/sql
